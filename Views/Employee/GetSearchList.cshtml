@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "GetSearchList";
+}
+<link href="~/Content/themes/base/autocomplete.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+<div>
+    <label>Country Search</label>
+    <input class="form-control" id="searchInput" />
+</div>
+<script>
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: '@Url.Action("GetSearchList", "Employee")',
+                dataType: "json",
+                data: { search: $("#searchInput").val() },
+                success: function (data) {
+                    response(data);
+                },
+                error: function (xhr, status, error) {
+                    alert("Error");
+                }
+            });
+        }
+    }).autocomplete('instance')._renderItem = function (ul, item) {
+        return $('<li>')
+            //.append("<img class='imageClass' src=" + item.Name + " alt=" + item.Name + "/>")
+            .append('<a href="/Home/Index">' + item.Name + '</a>')
+            .appendTo(ul);
+    };
+
+    //function updateTextBox(event, ui) {
+    //    $(this).val(ui.item.Name);
+    //    return false;
+    //}
+
+    @*$(document).ready(function () {
+        $('#searchInput').autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("GetSearchList", "ProductSearch")',
+                    method: 'post',
+                    data: { term: request.term },
+                    dataType: 'json',
+                    success: function (data) {
+                        response(data);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+            },
+            focus: updateTextBox,
+            select: updateTextBox
+        })
+            .autocomplete('instance')._renderItem = function (ul, item) {
+                return $('<li>')
+                    .append("<img class='imageClass' src=" + item.FlagPath + " alt=" + item.Name + "/>")
+                    .append('<a>' + item.Name + '</a>')
+                    .appendTo(ul);
+            };
+
+        function updateTextBox(event, ui) {
+            $(this).val(ui.item.Name);
+            return false;
+        }
+    });*@
+</script>
